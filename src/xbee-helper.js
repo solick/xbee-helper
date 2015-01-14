@@ -9,6 +9,8 @@ var xbee_api = require('xbee-api');
 var C = xbee_api.constants;
 
 
+
+
 /**
  * Class with several helper function for communication and work with xbee-api
  * @param debug
@@ -89,20 +91,29 @@ ZigBeeHelper.prototype.printFrame = function(frame, logger) {
 
     var _logger = null;
 
-    if(logger !== 'undefined')
+    /**
+     * For testing, the logger function will be not delivered as parameter
+     * and redefined to return the message instead of printing to console.log
+     */
+    if(logger)
     {
         _logger = logger;
     }
     else
     {
-        _logger = function() {
+        var testLog = function() {
 
         };
 
-        _logger.prototype.logMessage = function(message) {
+        testLog.prototype.logMessage = function(message, type) {
 
-            console.log(message);
+            var testString = type + ": " + message;
+
+            return(testString);
         };
+
+
+        _logger = new testLog();
     }
 
     switch (frame.type)
@@ -111,29 +122,29 @@ ZigBeeHelper.prototype.printFrame = function(frame, logger) {
 
             if(frame.command == "MY")
             {
-                logger.logMessage("<< Received Short Mac Address " + frame.remote16 + " for " + frame.remote64, "IN");
+               return _logger.logMessage("<< Received Short Mac Address " + frame.remote16 + " for " + frame.remote64, "IN");
             }
 
             break;
 
         case C.FRAME_TYPE.ZIGBEE_RECEIVE_PACKET:
-            logger.logMessage("<< Receive Packet - Data from " + frame.remote64 + " / " + frame.remote16 + ": " + this.ByteToString(frame.data, true), "IN");
+            return _logger.logMessage("<< Receive Packet - Data from " + frame.remote64 + " / " + frame.remote16 + ": " + this.ByteToString(frame.data, true), "IN");
             break;
 
         case C.FRAME_TYPE.ZIGBEE_EXPLICIT_RX:
 
-            logger.logMessage("<< Explicit RX - Data from " + frame.remote64 + " / " + frame.remote16 + " receive options: "+ frame.receiveOptions+ ": " + this.ByteToString(frame.data, true), "IN");
+            return _logger.logMessage("<< Explicit RX - Data from " + frame.remote64 + " / " + frame.remote16 + " receive options: "+ frame.receiveOptions+ ": " + this.ByteToString(frame.data, true), "IN");
 
             break;
 
         case C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS:
 
-            logger.logMessage(">> Transmit status for id: " + frame.id + " --> remote16: " + frame.remote16 + " transmitRetryCount: " + frame.transmitRetryCount + " deliveryStatus: " + frame.deliveryStatus + " discoveryStatus : " + frame.discoveryStatus, "IN");
+            return _logger.logMessage(">> Transmit status for id: " + frame.id + " --> remote16: " + frame.remote16 + " transmitRetryCount: " + frame.transmitRetryCount + " deliveryStatus: " + frame.deliveryStatus + " discoveryStatus : " + frame.discoveryStatus, "IN");
 
             break;
 
         default:
-            logger.logMessage("!! Unknown frame type: " + frame.type, "ERROR");
+           return _logger.logMessage("!! Unknown frame type: " + frame.type, "ERROR");
 
     }
 
