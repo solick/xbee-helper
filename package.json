@@ -1,6 +1,6 @@
 {
   "name": "xbee-helper",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "helper functions for communication with xbee-api",
   "main": "./src/xbee-helper.js",
   "scripts": {
