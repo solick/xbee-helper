@@ -4,15 +4,19 @@
   "description": "helper functions for communication with xbee-api",
   "main": "./src/xbee-helper.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine-node ./test --watch ./src --color"
   },
   "keywords": [
     "xbee",
     "helper"
   ],
   "author": "Lyn Matten",
-  "license": "ISC",
+  "license": "GNU GPL V2",
   "dependencies": {
     "xbee-api": "^0.3.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/solick/xbee-helper"
   }
 }
