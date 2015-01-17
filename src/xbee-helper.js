@@ -152,6 +152,7 @@ ZigBeeHelper.prototype.printFrame = function(frame, logger) {
 
 /**
  * function getATCommand() - parse a string for AT command options and returns a JSON object
+ * An AT command has to have the following structure: AT+{parameter1.name}={parameter1.value},{parameter2.name}={parameter2.value}...
  * @param data
  * @returns {*}
  */
@@ -177,30 +178,44 @@ ZigBeeHelper.prototype.getATCommand = function(data) {
     {
 
         cmdJSON.commandString = data;
+        cmdJSON.arrLength = 0;
+        cmdJSON.commandArr = [];
 
+        var tmpArr = data.substr(3,data.length).split(',');
 
-        var command = data.substr(3,data.length);
-        //console.log("command: " + command);
-
-        //get param if exists
-
-        var param = "";
-        var subcmd = "";
-
-
-        if(command.indexOf('=') > -1)
+        for(var i = 0; i < tmpArr.length; i++)
         {
-            subcmd = command.substr(0,command.indexOf('='));
-            param = command.substr(command.indexOf('=')+1, command.length-1);
+            var command = tmpArr[i];
 
-            //console.log("subcmd: " + subcmd + " -- pram: " + param);
+            var tmpObj = {
+                commandName: "",
+                commandParam: ""
+            };
+
+            var param = "";
+            var subcmd = "";
 
 
-            cmdJSON.commandName = subcmd;
-            cmdJSON.commandParam = param.replace(/(\r\n|\n|\r)/gm,"");
+            if(command.indexOf('=') > -1)
+            {
+                subcmd = command.substr(0,command.indexOf('='));
+                param = command.substr(command.indexOf('=')+1, command.length-1);
+
+                //console.log("subcmd: " + subcmd + " -- pram: " + param);
+
+
+                tmpObj.commandName = subcmd;
+                tmpObj.commandParam = param.replace(/(\r\n|\n|\r)/gm,"");
+
+                cmdJSON.commandArr.push(tmpObj);
+
+                cmdJSON.arrLength++;
+            }
 
 
         }
+
+
 
     }
 

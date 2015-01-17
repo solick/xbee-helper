@@ -125,6 +125,41 @@ describe('xbee-helper class', function() {
 
         });
 
+        describe('getATCommand', function() {
+
+            it('should be implemented', function() {
+
+                expect(ZigBeeHelper.getATCommand).toBeDefined();
+            });
+
+            it('should return a valid JSON object with pared values', function() {
+
+                var testStr = 'AT+1=OK';
+                var testObj = {
+
+                    commandString: testStr,
+                    arrLength: 1,
+                    commandArr: [
+                        {
+                            commandName: '1',
+                            commandParam: 'OK'
+                        }
+                    ]
+
+                };
+
+                expect(ZigBeeHelper.getATCommand(testStr)).toEqual(testObj);
+
+
+            });
+
+            it('should return null for an invalid AT command', function() {
+
+                expect(ZigBeeHelper.getATCommand('ThisIsNoValidATCommand')).toBe(null);
+            });
+
+        });
+
 
     });
 
