@@ -118,6 +118,15 @@ ZigBeeHelper.prototype.printFrame = function(frame, logger) {
 
     switch (frame.type)
     {
+        case C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST:
+
+            if(frame.command == "MY")
+            {
+                return _logger.logMessage(">> Send broadcast short Mac address request " + frame.destination16 + " for " + frame.destination64, "OUT");
+            }
+
+            break;
+
         case C.FRAME_TYPE.REMOTE_COMMAND_RESPONSE:
 
             if(frame.command == "MY")
@@ -128,12 +137,12 @@ ZigBeeHelper.prototype.printFrame = function(frame, logger) {
             break;
 
         case C.FRAME_TYPE.ZIGBEE_RECEIVE_PACKET:
-            return _logger.logMessage("<< Receive Packet - Data from " + frame.remote64 + " / " + frame.remote16 + ": " + this.ByteToString(frame.data, true), "IN");
+            return _logger.logMessage("<< Receive Packet - Data from " + frame.remote16 + " / " + frame.remote64 + ": " + this.ByteToString(frame.data, true), "IN");
             break;
 
         case C.FRAME_TYPE.ZIGBEE_EXPLICIT_RX:
 
-            return _logger.logMessage("<< Explicit RX - Data from " + frame.remote64 + " / " + frame.remote16 + " receive options: "+ frame.receiveOptions+ ": " + this.ByteToString(frame.data, true), "IN");
+            return _logger.logMessage("<< Explicit RX - Data from " + frame.remote16 + " / " + frame.remote64 + " receive options: "+ frame.receiveOptions+ ": " + this.ByteToString(frame.data, true), "IN");
 
             break;
 
