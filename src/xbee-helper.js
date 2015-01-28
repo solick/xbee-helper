@@ -131,7 +131,7 @@ ZigBeeHelper.prototype.printFrame = function(frame, logger) {
 
             if(frame.command == "MY")
             {
-               return _logger.logMessage("<< Received Short Mac Address " + frame.remote16 + " for " + frame.remote64, "IN");
+               return _logger.logMessage(this.getStringForDate(new Date()) + " << Received Short Mac Address " + frame.remote16 + " for " + frame.remote64, "IN");
             }
 
             break;
