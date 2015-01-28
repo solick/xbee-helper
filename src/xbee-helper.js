@@ -122,7 +122,7 @@ ZigBeeHelper.prototype.printFrame = function(frame, logger) {
 
             if(frame.command == "MY")
             {
-                return _logger.logMessage(">> Send broadcast short Mac address request " + frame.destination16 + " for " + frame.destination64, "OUT");
+                return _logger.logMessage(this.getStringForDate(new Date()) + " >> Send broadcast short Mac address request " + frame.destination16 + " for " + frame.destination64, "OUT");
             }
 
             break;
@@ -137,23 +137,23 @@ ZigBeeHelper.prototype.printFrame = function(frame, logger) {
             break;
 
         case C.FRAME_TYPE.ZIGBEE_RECEIVE_PACKET:
-            return _logger.logMessage("<< Receive Packet - Data from " + frame.remote16 + " / " + frame.remote64 + ": " + this.ByteToString(frame.data, true), "IN");
+            return _logger.logMessage(this.getStringForDate(new Date()) + " << Receive Packet - Data from " + frame.remote16 + " / " + frame.remote64 + ": " + this.ByteToString(frame.data, true), "IN");
             break;
 
         case C.FRAME_TYPE.ZIGBEE_EXPLICIT_RX:
 
-            return _logger.logMessage("<< Explicit RX - Data from " + frame.remote16 + " / " + frame.remote64 + " receive options: "+ frame.receiveOptions+ ": " + this.ByteToString(frame.data, true), "IN");
+            return _logger.logMessage(this.getStringForDate(new Date()) + " << Explicit RX - Data from " + frame.remote16 + " / " + frame.remote64 + " receive options: "+ frame.receiveOptions+ ": " + this.ByteToString(frame.data, true), "IN");
 
             break;
 
         case C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS:
 
-            return _logger.logMessage(">> Transmit status for id: " + frame.id + " --> remote16: " + frame.remote16 + " transmitRetryCount: " + frame.transmitRetryCount + " deliveryStatus: " + frame.deliveryStatus + " discoveryStatus : " + frame.discoveryStatus, "IN");
+            return _logger.logMessage(this.getStringForDate(new Date()) + " >> Transmit status for id: " + frame.id + " --> remote16: " + frame.remote16 + " transmitRetryCount: " + frame.transmitRetryCount + " deliveryStatus: " + frame.deliveryStatus + " discoveryStatus : " + frame.discoveryStatus, "IN");
 
             break;
 
         default:
-           return _logger.logMessage("!! Unknown frame type: " + frame.type, "ERROR");
+           return _logger.logMessage(this.getStringForDate(new Date()) + " !! Unknown frame type: " + frame.type, "ERROR");
 
     }
 
@@ -265,6 +265,18 @@ ZigBeeHelper.prototype.setDebug = function(debug) {
         return true;
     }
 
+};
+
+/**
+ * returns a well formed string from a delivered date object
+ * @param date
+ * @returns {string}
+ */
+ZigBeeHelper.prototype.getStringForDate = function(date) {
+
+    var monthArr = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+
+    return date.getFullYear() + "-" + monthArr[date.getMonth()] + "-" + ('0' + date.getDate()).slice(-2) + " " + ('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2) + "." + date.getMilliseconds();
 };
 
 exports.ZigBeeHelper = ZigBeeHelper;
