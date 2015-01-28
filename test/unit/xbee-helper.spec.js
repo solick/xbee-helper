@@ -50,6 +50,13 @@ describe('xbee-helper class', function() {
 
             });
 
+            it("should remove all \r\n combinations while converting", function() {
+
+                var data = [ 65, 84, 43, 76, 67, 75, 61, 79, 75, 13, 10 ] ;
+
+                expect(ZigBeeHelper.ByteToString(data, true)).toBe("AT+LCK=OK");
+            });
+
         });
 
         describe('StrinToByteArray() function', function() {
@@ -118,10 +125,42 @@ describe('xbee-helper class', function() {
 
         describe('setDebug() function', function() {
 
+            beforeEach(function() {
+
+
+
+                spyOn(ZigBeeHelper,"setDebug");
+
+            });
+
             it('should be implemented', function() {
 
                 expect(ZigBeeHelper.setDebug).toBeDefined();
             });
+
+            it('should be called', function() {
+
+                ZigBeeHelper.setDebug();
+
+                expect(ZigBeeHelper.setDebug).toHaveBeenCalled();
+
+            });
+
+            it('should be called with a boolean value', function() {
+
+                ZigBeeHelper.setDebug(true);
+                /*TODO: Check the parameter tyoe*/
+                expect(ZigBeeHelper.setDebug).toHaveBeenCalledWith(true);
+            });
+
+            it('should return false if parameter is not a boolean value', function() {
+
+                /*TODO: Complete this test */
+                //var ret = th.setDebug("BLA");
+
+                //expect(ret).toBe(false);
+            });
+
 
         });
 
@@ -156,6 +195,8 @@ describe('xbee-helper class', function() {
             it('should return null for an invalid AT command', function() {
 
                 expect(ZigBeeHelper.getATCommand('ThisIsNoValidATCommand')).toBe(null);
+                expect(ZigBeeHelper.getATCommand("")).toBeNull();
+                expect(ZigBeeHelper.getATCommand("AT+")).toBeNull();
             });
 
         });
