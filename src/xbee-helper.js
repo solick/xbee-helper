@@ -276,7 +276,7 @@ ZigBeeHelper.prototype.getStringForDate = function(date) {
 
     var monthArr = ['01','02','03','04','05','06','07','08','09','10','11','12'];
 
-    return date.getFullYear() + "-" + monthArr[date.getMonth()] + "-" + ('0' + date.getDate()).slice(-2) + " " + ('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2) + "." + date.getMilliseconds();
+    return date.getFullYear() + "-" + monthArr[date.getMonth()] + "-" + ('0' + date.getDate()).slice(-2) + " " + ('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2) + ":" + ('0' + date.getSeconds()).slice(-2) + "."+ date.getMilliseconds();
 };
 
 exports.ZigBeeHelper = ZigBeeHelper;

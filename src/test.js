@@ -29,3 +29,5 @@ var frame_obj = {
 };
 
 console.log(ZigBeeHelper.printFrame(frame_obj));
+
+console.log(ZigBeeHelper.getStringForDate(new Date()));
