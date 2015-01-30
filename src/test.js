@@ -5,7 +5,7 @@
 
 var XbeeHelper = require('./xbee-helper');
 
-var ZigBeeHelper = new XbeeHelper.ZigBeeHelper();
+var ZigBeeHelper = new XbeeHelper.ZigBeeHelper(false, true);
 
 /**
  * returns an object with parsed at commands

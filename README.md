@@ -12,6 +12,16 @@ After this, the functions can be called by using the object:
 
     console.log(ZigBeeHelper.getATCommand('AT+1=OK,2=0'));
 
+At the constructor, two parameters can be passed:
+
+### parameter debug
+
+At the moment not in use. Implemented for future enabling of more detailed debug information.
+
+### parameter milliseconds
+
+By default, the timestamp of getStringForDate() function returns also the milliseconds. To avoid this, add true to the constructor as second argument to disable display of milliseconds.
+
 
 ## ByteToString(bytes, trimEmd)
 
@@ -73,5 +83,10 @@ Returns the actual debug state.
 ## setDebug(state)
 
 Sets the debug State.
+
+
+## getStringForDate(date)
+
+Expects a date object and returns a special formatted datetime string. With the constructor parameter milliseconds, the display of milliseconds can be enabled / disabled. By default, milliseconds are enabled.
 
 

@@ -22,7 +22,7 @@ describe('xbee-helper class', function() {
 
             beforeEach(function() {
 
-                ZigBeeHelper = new XbeeHelper.ZigBeeHelper();
+                ZigBeeHelper = new XbeeHelper.ZigBeeHelper(false, true);
 
         });
 
@@ -88,12 +88,122 @@ describe('xbee-helper class', function() {
 
             it('should print a default message', function() {
 
-                var defaultMessage = "ERROR: !! Unknown frame type: test";
+
                 var testFrame = {
                     type: 'test'
                 };
 
+                var defaultMessage = "ERROR: " + ZigBeeHelper.getStringForDate(new Date()) +" !! Unknown frame type: test";
+
                 expect(ZigBeeHelper.printFrame(testFrame)).toEqual(defaultMessage);
+
+            });
+
+            it('should return a valid message for Zigbee Remote At Command Request 0x17 with command MY', function() {
+
+                var obj = {
+                    type: 0x17, // xbee_api.constants.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST
+                    id: 0x01, // optional, nextFrameId() is called per default
+                    destination64: "0013a20040401122",
+                    destination16: "fffe", // optional, "fffe" is default
+                    remoteCommandOptions: 0x02, // optional, 0x02 is default
+                    command: "MY",
+                    commandParameter: [ 0x01 ] // Can either be string or byte array.
+                };
+
+                var result = 'OUT: '+ ZigBeeHelper.getStringForDate(new Date()) +' >> Send broadcast short Mac address request fffe for 0013a20040401122';
+
+                expect(ZigBeeHelper.printFrame(obj)).toEqual(result);
+
+            });
+
+
+            it('should return a valid message for Zigbee Remote Command Response 0x97 with command MY', function() {
+
+                var obj = {
+                    type: 0x97, // xbee_api.constants.FRAME_TYPE.REMOTE_COMMAND_RESPONSE
+                    id: 0x01,
+                    remote64: "0013a20040522baa",
+                    remote16: "7d84",
+                    command: "MY",
+                    commandStatus: 0x00,
+                    commandData: [ 0x40, 0x52, 0x2b, 0xaa ]
+                };
+
+                var result = 'IN: '+ ZigBeeHelper.getStringForDate(new Date()) +' << Received Short Mac Address 7d84 for 0013a20040522baa';
+
+                expect(ZigBeeHelper.printFrame(obj)).toEqual(result);
+
+            });
+
+
+            it('should return a valid message for Zigbee Receive Packet (AO=0) 0x90 ', function() {
+
+                var obj = {
+                    type: 0x90, // xbee_api.constants.FRAME_TYPE.ZIGBEE_RECEIVE_PACKET
+                    remote64: "0013a20040522baa",
+                    remote16: "7d84",
+                    receiveOptions: 0x01,
+                    data: [ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]
+                };
+
+                var result = 'IN: '+ ZigBeeHelper.getStringForDate(new Date()) +' << Receive Packet - Data from 7d84 / 0013a20040522baa: RxData';
+
+                expect(ZigBeeHelper.printFrame(obj)).toEqual(result);
+
+            });
+
+
+            it('should return a valid message for Zigbee Explicit RX (AO=1) 0x91 ', function() {
+
+                var obj = {
+                    type: 0x91, // xbee_api.constants.FRAME_TYPE.ZIGBEE_EXPLICIT_RX
+                    remote64: "0013a20040522baa",
+                    remote16: "7d84",
+                    receiveOptions: 0x01,
+                    data: [ 0x52, 0x78, 0x44, 0x61, 0x74, 0x61 ]
+                };
+
+                var result = 'IN: '+ ZigBeeHelper.getStringForDate(new Date()) +' << Explicit RX - Data from 7d84 / 0013a20040522baa receive options: 1: RxData';
+
+                expect(ZigBeeHelper.printFrame(obj)).toEqual(result);
+
+            });
+
+
+            it('should return a valid message for Zigbee Transmit Status 0x8B', function() {
+
+                var obj = {
+                    type: 0x8B, // xbee_api.constants.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS
+                    id: 0x01,
+                    remote16: "7d84",
+                    transmitRetryCount: 0,
+                    deliveryStatus: 0,
+                    discoveryStatus: 1
+                };
+
+                var result = 'IN: '+ ZigBeeHelper.getStringForDate(new Date()) +' >> Transmit status for id: 1 --> remote16: 7d84 transmitRetryCount: 0 deliveryStatus: 0 discoveryStatus : 1' ;
+
+                expect(ZigBeeHelper.printFrame(obj)).toEqual(result);
+
+            });
+
+
+            it('should return a valid message for Zigbee Transmit Request 0x10', function() {
+
+                var obj = {
+                    type: 0x10, // xbee_api.constants.FRAME_TYPE.ZIGBEE_TRANSMIT_REQUEST
+                    id: 0x01, // optional, nextFrameId() is called per default
+                    destination64: "0013a200400a0127",
+                    destination16: "fffe", // optional, "fffe" is default
+                    broadcastRadius: 0x00, // optional, 0x00 is default
+                    options: 0x00, // optional, 0x00 is default
+                    data: "TxData0A" // Can either be string or byte array.
+                };
+
+                var result = 'OUT: '+ ZigBeeHelper.getStringForDate(new Date()) +' >> Transmit request for id: 1 --> destination16: fffe / 0013a200400a0127 broadcastRadius: 0 options: 0 data : TxData0A';
+
+                expect(ZigBeeHelper.printFrame(obj)).toEqual(result);
 
             });
 

@@ -16,7 +16,7 @@ var C = xbee_api.constants;
  * @param debug
  * @constructor
  */
-var ZigBeeHelper = function(debug)
+var ZigBeeHelper = function(debug, milliseconds)
 {
 
     if(debug == null)
@@ -26,6 +26,15 @@ var ZigBeeHelper = function(debug)
     else
     {
         this._debug = debug;
+    }
+
+    if(milliseconds == null)
+    {
+        this._milliseconds = false;
+    }
+    else
+    {
+        this._milliseconds = true;
     }
 
 
@@ -149,6 +158,12 @@ ZigBeeHelper.prototype.printFrame = function(frame, logger) {
         case C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS:
 
             return _logger.logMessage(this.getStringForDate(new Date()) + " >> Transmit status for id: " + frame.id + " --> remote16: " + frame.remote16 + " transmitRetryCount: " + frame.transmitRetryCount + " deliveryStatus: " + frame.deliveryStatus + " discoveryStatus : " + frame.discoveryStatus, "IN");
+
+            break;
+
+        case C.FRAME_TYPE.ZIGBEE_TRANSMIT_REQUEST:
+
+            return _logger.logMessage(this.getStringForDate(new Date()) + " >> Transmit request for id: " + frame.id + " --> destination16: " + frame.destination16 + " / " + frame.destination64 + " broadcastRadius: " + frame.broadcastRadius + " options: " + frame.options + " data : " + frame.data, "OUT");
 
             break;
 
@@ -276,7 +291,17 @@ ZigBeeHelper.prototype.getStringForDate = function(date) {
 
     var monthArr = ['01','02','03','04','05','06','07','08','09','10','11','12'];
 
-    return date.getFullYear() + "-" + monthArr[date.getMonth()] + "-" + ('0' + date.getDate()).slice(-2) + " " + ('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2) + ":" + ('0' + date.getSeconds()).slice(-2) + "."+ date.getMilliseconds();
+    if(this._milliseconds)
+    {
+        return date.getFullYear() + "-" + monthArr[date.getMonth()] + "-" + ('0' + date.getDate()).slice(-2) + " " + ('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2) + ":" + ('0' + date.getSeconds()).slice(-2);
+
+    }
+    else
+    {
+        return date.getFullYear() + "-" + monthArr[date.getMonth()] + "-" + ('0' + date.getDate()).slice(-2) + " " + ('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2) + ":" + ('0' + date.getSeconds()).slice(-2) + "."+ date.getMilliseconds();
+
+    }
+
 };
 
 exports.ZigBeeHelper = ZigBeeHelper;
