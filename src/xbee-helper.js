@@ -52,20 +52,27 @@ var ZigBeeHelper = function(debug, milliseconds)
 ZigBeeHelper.prototype.ByteToString = function(bytes, TrimEnd) {
 
     var str="";
-    for(var i = 0; i < bytes.length; i++)
-    {
-        var char = bytes[i];
 
-        str += String.fromCharCode(char);
+    if(bytes == undefined || bytes == null) {
+        str = "<< UNDEFINED >>";
+    }
+    else {
+        for(var i = 0; i < bytes.length; i++)
+        {
+            var char = bytes[i];
+
+            str += String.fromCharCode(char);
+        }
+
+        if(TrimEnd)
+        {
+            /* Remove '\r\n' or similar from end of string if exists */
+            str = str.replace(/(\r\n|\n|\r)/gm,"");
+
+
+        }
     }
 
-    if(TrimEnd)
-    {
-        /* Remove '\r\n' or similar from end of string if exists */
-        str = str.replace(/(\r\n|\n|\r)/gm,"");
-
-
-    }
 
     return str;
 };

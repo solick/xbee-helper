@@ -1,6 +1,6 @@
 {
   "name": "xbee-helper",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "helper functions for communication with xbee-api",
   "main": "./src/xbee-helper.js",
   "scripts": {
@@ -13,6 +13,7 @@
   "author": "Lyn Matten",
   "license": "GNU GPL V2",
   "dependencies": {
+    "jasmine-reporters": "^2.0.7",
     "xbee-api": "^0.3.8"
   },
   "repository": {

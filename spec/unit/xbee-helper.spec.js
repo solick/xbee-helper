@@ -57,6 +57,12 @@ describe('xbee-helper class', function() {
                 expect(ZigBeeHelper.ByteToString(data, true)).toBe("AT+LCK=OK");
             });
 
+            it("should return '<< UNDEFINED >>' if parameter is undefined or null", function() {
+
+                expect(ZigBeeHelper.ByteToString(undefined)).toBe("<< UNDEFINED >>");
+                expect(ZigBeeHelper.ByteToString(null)).toBe("<< UNDEFINED >>");
+            });
+
         });
 
         describe('StrinToByteArray() function', function() {
